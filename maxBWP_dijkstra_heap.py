@@ -5,6 +5,7 @@ import random
 import timeit
 import time
 from datetime import datetime
+from heapImplementation import *
 
 def randomGraph():
 	#start = timeit.default_timer()
@@ -47,9 +48,9 @@ def maxBandwidth(B,s,t):
 			for pair in B[v]:
 				if status[pair[1]]=="fringe":
 					unvisited_queue.append(pair)
-	heapq._heapify_max(unvisited_queue)
+	heapify_max(unvisited_queue)
 	while(len(unvisited_queue)):
-		uv = heapq.heappop(unvisited_queue)
+		uv = heappop(unvisited_queue)
 		v = uv[1]
 		status[v] = "in-tree"
 		for w in B[v]:
@@ -60,15 +61,15 @@ def maxBandwidth(B,s,t):
 			elif(status[w[1]]=="fringe" and capacity[w[1]]<minimum(capacity[v],w[0])):
 				dad[w[1]] = v
 				capacity[w[1]] = minimum(capacity[v],w[0])
-		while(len(unvisited_queue)):
-			heapq.heappop(unvisited_queue)
+		#while(len(unvisited_queue)):
+		#	heappop(unvisited_queue)
 		unvisited_queue = []
 		for v in B.keys():
 			if status[v]=="in-tree":
 				for pair in B[v]:
 					if status[pair[1]]=="fringe":
 						unvisited_queue.append(pair)
-		heapq._heapify_max(unvisited_queue)
+		heapify_max(unvisited_queue)
 	#return dad
 	i = t
 	path = [t]

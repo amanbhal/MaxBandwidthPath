@@ -1,5 +1,5 @@
 import sys
-import heapq
+from heapImplementation import *
 def maxBandwidth(B,s,t):
 	status = ["unseen"]*6
 	dad = [-1]*6
@@ -16,9 +16,9 @@ def maxBandwidth(B,s,t):
 				if status[pair[1]]=="fringe":
 					unvisited_queue.append(pair)
 	print unvisited_queue
-	heapq._heapify_max(unvisited_queue)
+	heapify_max(unvisited_queue)
 	while(len(unvisited_queue)):
-		uv = heapq.heappop(unvisited_queue)
+		uv = heappop(unvisited_queue)
 		v = uv[1]
 		status[v] = "in-tree"
 		for w in B[v]:
@@ -42,7 +42,7 @@ def maxBandwidth(B,s,t):
 					if status[pair[1]]=="fringe":
 						unvisited_queue.append(pair)
 		print unvisited_queue
-		heapq._heapify_max(unvisited_queue)
+		heapify_max(unvisited_queue)
 	#return dad
 	i = t
 	path = [t]

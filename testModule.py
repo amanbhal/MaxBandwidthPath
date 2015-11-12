@@ -1,63 +1,78 @@
 import sys
-from heapImplementation import *
+import time
 def maxBandwidth(B,s,t):
-	status = ["unseen"]*6
+	global dad
+	global rank
 	dad = [-1]*6
-	capacity = [100]*6
-	status[s] = "in-tree"
-	for w in B[s]:
-		status[w[1]] = "fringe"
-		capacity[w[1]] = w[0]
-		dad[w[1]] = s
-	unvisited_queue = []
+	rank = [0]*6
+	edges = {}
 	for v in B.keys():
-		if status[v]=="in-tree":
-			for pair in B[v]:
-				if status[pair[1]]=="fringe":
-					unvisited_queue.append(pair)
-	print unvisited_queue
-	heapify_max(unvisited_queue)
-	while(len(unvisited_queue)):
-		uv = heappop(unvisited_queue)
-		v = uv[1]
-		status[v] = "in-tree"
-		for w in B[v]:
-			if status[w[1]]=="unseen":
-				print str(w[1]) + " is unseen",
-				status[w[1]] = "fringe"
-				dad[w[1]] = v
-				capacity[w[1]] = minimum(capacity[v],w[0])
-				print " new capacity is : " + str(capacity[w[1]])
-			elif(status[w[1]]=="fringe" and capacity[w[1]]<minimum(capacity[v],w[0])):
-				print str(w[1]) + " is fringe",
-				dad[w[1]] = v
-				capacity[w[1]] = minimum(capacity[v],w[0])
-				print " new capacity is : " + str(capacity[w[1]])
-		#while(len(unvisited_queue)):
-		#	heapq.heappop(unvisited_queue)
-		unvisited_queue = []
-		for v in B.keys():
-			if status[v]=="in-tree":
-				for pair in B[v]:
-					if status[pair[1]]=="fringe":
-						unvisited_queue.append(pair)
-		print unvisited_queue
-		heapify_max(unvisited_queue)
-	#return dad
-	i = t
-	path = [t]
-	while(dad[i]!=-1):
-		path.append(dad[i])
-		i = dad[i]
-	path.reverse()
-	print "Number of vertices traversed in maximum bandwidth path is : " + str(len(path))
-	print path
-
-def minimum(a,b):
-	if(a<b):
-		return a
+		for pair in B[v]:
+			small = -1
+			large = -1
+			if v<pair[1]:
+				small = v
+				large = pair[1]
+			else:
+				small = pair[1]
+				large = v
+			if (small,large) not in edges.keys():
+				edges.update({(small,large):(pair[0],False)})
+	edgeWeight = edges.values()
+	edgeWeight.sort()
+	edgeWeight.reverse()
+	T = []
+	#for v in B.keys():
+	#	MakeSet(v)
+	for weight in edgeWeight:
+		v = -1
+		w = -1
+		for vertex, weightVisited in edges.items():
+			if weightVisited[0]==weight[0] and weightVisited[1]==False:
+				v = vertex[0]
+				w = vertex[1]
+				weightVisited = True
+		#print "Edge is : " + str(v) + "," + str(w),
+		s1 = Find(v)
+		s2 = Find(w)
+		if s1!=s2:
+			T.append((v,w))
+			Union(s1,s2)
+	print t,
+	w = t
+	path = [-1]*6
+	for pair in T:
+		path[pair[1]] = pair[0]
+	while(path[w]!=s):
+		print path[w],
+		w = path[w]
+	print s
+	
+			
+def MakeSet(v):
+	global dad
+	global rank
+	dad[v] = 0
+	rank[v] = 0
+	
+def Find(v):
+	global dad
+	w = v
+	while dad[w]!=-1:
+		w = dad[w]
+	return w
+	
+def Union(s1,s2):
+	global dad
+	global rank
+	if(rank[s1]>rank[s2]):
+		dad[s2] = s1
+	elif(rank[s2]>rank[s1]):
+		dad[s1] = s2
 	else:
-		return b
+		dad[s2] = s1
+		rank[s1] += 1
+	
 	
 B = {0:[(7,1),(4,2),(8,3)],
 	1: [(7,0),(1,2)],
@@ -65,5 +80,8 @@ B = {0:[(7,1),(4,2),(8,3)],
 	3: [(8,0),(2,4)],
 	4: [(3,2),(2,3),(6,5)],
 	5: [(6,4)]}
-
+	
+start = time.time()	
 maxBandwidth(B,0,5)
+stop = time.time() - start
+print stop

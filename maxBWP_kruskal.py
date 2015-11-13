@@ -1,7 +1,7 @@
 import profile
 import random
 import timeit
-import time
+from time import clock
 from datetime import datetime
 
 def randomGraph(vertices,links):
@@ -26,6 +26,11 @@ def randomGraph(vertices,links):
 	##print (time.time() - start)
 	s = A[random.randrange(0,vertices,2)]
 	t = A[random.randrange(1,vertices,2)]
+	"""for v in B:
+		print v, ":",
+		for pair in B[v]:
+			print pair,
+		print """
 	print "Starting Point is : " + str(s)
 	print "Ending Point is : " + str(t)
 	maxBandwidth(B,s,t,vertices)
@@ -67,15 +72,54 @@ def maxBandwidth(B,s,t,vertices):
 		if s1!=s2:
 			T.append((v,w))
 			Union(s1,s2)
-	print t,
-	w = t
+	#print T
+	makeGraph(T,s,t,vertices)
+	"""if t>s:
+		print t,
+		w = t
+	else:
+		print s,
+		w = s
 	path = [-1]*vertices
 	for pair in T:
 		path[pair[1]] = pair[0]
-	while(path[w]!=s):
+	while(path[w]!=-1):
 		print path[w],
 		w = path[w]
+	if t>s:
+		print s
+	else:
+		print t"""
+		
+def makeGraph(T,s,t,vertices):
+	G = {}
+	for i in range(vertices):
+		G.update({i:[]})
+	for pair in T:
+		G[pair[0]].append(pair[1])
+		G[pair[1]].append(pair[0])
+	global color
+	global path
+	path = [-1]*vertices
+	color = ["white"]*vertices
+	DFSpath(G,s,t)
+	#print "Path is : ",
+	#print path
+	w = t
+	while(path[w]!=-1):
+		print w
+		w = path[w]
 	print s
+	
+def DFSpath(G,s,t):
+	global path
+	color[s] = "grey"
+	for i in G[s]:
+		if color[i]=="white":
+			path[i] = s
+			DFSpath(G,i,t)
+	color[s] = "black"
+	
 	
 def MakeSet(v):
 	global dad
@@ -100,4 +144,14 @@ def Union(s1,s2):
 	else:
 		dad[s2] = s1
 		rank[s1] += 1
-randomGraph(5000,1000)
+start = clock()
+randomGraph(1000,20)
+stop = clock()
+print "Time taken : ", (stop-start)
+"""B = {0:[(7,1),(4,2),(8,3)],
+	1: [(7,0),(1,2)],
+	2: [(4,0),(1,1),(3,4)],
+	3: [(8,0),(2,4)],
+	4: [(3,2),(2,3),(6,5)],
+	5: [(6,4)]}
+maxBandwidth(B,0,5,6)"""

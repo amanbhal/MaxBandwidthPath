@@ -81,7 +81,29 @@ B = {0:[(7,1),(4,2),(8,3)],
 	4: [(3,2),(2,3),(6,5)],
 	5: [(6,4)]}
 	
-start = time.time()	
+"""start = time.time()	
 maxBandwidth(B,0,5)
 stop = time.time() - start
-print stop
+print stop"""
+T = [(3, 7), (0, 2), (4, 7), (0, 5), (1, 3), (7, 9), (2, 7), (7, 8), (2, 6)]
+print T
+s = 5
+t = 1
+vertices = 10
+if t>s:
+	print t,
+	w = t
+else:
+	print s,
+	w = s
+path = [-1]*vertices
+for pair in T:
+	path[pair[1]] = pair[0]
+while(path[w]!=-1):
+	print path[w],
+	w = path[w]
+if t>s:
+	print s
+else:
+	print t
+	

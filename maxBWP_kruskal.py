@@ -3,8 +3,9 @@ import random
 import timeit
 from time import clock
 from datetime import datetime
+from randomGraph import *
 
-def randomGraph(vertices,links):
+def directedRandomGraph(vertices,links):
 	#start = timeit.default_timer()
 	#start = datetime.now().microsecond
 	##start = time.time()
@@ -42,7 +43,7 @@ def maxBandwidth(B,s,t,vertices):
 	rank = [0]*vertices
 	edges = {}
 	for v in B.keys():
-		for pair in B[v]:
+		for pair in B[v][1]:
 			small = -1
 			large = -1
 			if v<pair[1]:
@@ -144,8 +145,12 @@ def Union(s1,s2):
 	else:
 		dad[s2] = s1
 		rank[s1] += 1
+
+B,s,t = undirectedRandomGraph(50,10)
+print "Starting Point : ",s
+print "Ending Point : ",t
 start = clock()
-randomGraph(1000,20)
+maxBandwidth(B,s,t,50)
 stop = clock()
 print "Time taken : ", (stop-start)
 """B = {0:[(7,1),(4,2),(8,3)],

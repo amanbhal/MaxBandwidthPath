@@ -1,40 +1,30 @@
 from time import clock
 import random
-def randomGraph(vertices,links):
+def undirectedRandomGraph(vertices,percentage):
 	B = {}
 	A = []
-	conditionForAll = []
+	maxEdge = (vertices*percentage)/100
+	
 	for i in range(vertices):
 		A.append(i)
-		B.update({i:[]})
-		conditionForAll.append(True)
-	condition = True
-	while(condition==True):
-		u = random.randrange(vertices)
-		v = random.randrange(vertices)
-		weight = random.randrange(1,101)
-		if u==v or len(B[v])==links or len(B[u])==links:
-			continue
-		for v in B.keys():
-			if(len(B[v])>=links):
-				conditionForAll[v] = False
-		result = False
-		for v in B.keys():
-			result = result or conditionForAll[v]
-		if(result==False):
-			condition = False
-			continue
-		else:
-			condition = True
-		B[v].append((weight,u))
-		B[u].append((weight,v))
-	for i in range(vertices):
-		A.append(i)
-	s = A[random.randrange(0,vertices,2)]
-	t = A[random.randrange(1,vertices,2)]
-	for v in B:
-		print v, ":",
-		for pair in B[v]:
+		B.update({i:[0,[]]})
+		
+	for v in range(vertices):
+		for u in range(v+1,vertices):
+			x = random.randrange(1,101)
+			weight = random.randrange(1,101)
+			if(x<=percentage and B[v][0]<maxEdge and B[u][0]<maxEdge):
+				B[v][1].append((weight,u))
+				B[u][1].append((weight,v))
+				B[v][0] += 1
+				B[u][0] += 1
+	
+	s = A[random.randrange(len(A))]
+	A.pop(A.index(s))
+	t = A[random.randrange(len(A))]
+	return B,s,t
+	"""for v in B:
+		print v, ":", B[v][0], "->",
+		for pair in B[v][1]:
 			print pair[1],
-		print ""
-randomGraph(5,2)
+		print """

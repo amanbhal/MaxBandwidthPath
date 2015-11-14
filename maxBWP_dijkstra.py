@@ -3,6 +3,7 @@ import random
 import timeit
 import time
 from datetime import datetime
+from randomGraph import *
 
 def randomGraph():
 	#start = timeit.default_timer()
@@ -35,14 +36,14 @@ def maxBandwidth(B,s,t):
 	dad = [-1]*5000
 	capacity = [0]*5000
 	status[s] = "in-tree"
-	for w in B[s]:
+	for w in B[s][1]:
 		status[w[1]] = "fringe"
 		capacity[w[1]] = w[0]
 		dad[w[1]] = s
 	while("fringe" in status):
 		v = largestFringe(status,capacity)
 		status[v] = "in-tree"
-		for w in B[v]:
+		for w in B[v][1]:
 			if status[w[1]]=="unseen":
 				status[w[1]] = "fringe"
 				dad[w[1]] = v
@@ -80,8 +81,5 @@ def largestFringe(status,capacity):
 			v = i
 	return v
 	
-#profile.run('randomGraph()')"""
-randomGraph()
-#s = A[random.randrange(0,5000,2)]
-#t = A[random.randrange(1,5000,2)]
-#print maxBandwidth(B,s,t)
+B,s,t = undirectedRandomGraph(5000,1000)
+maxBandwidth(B,s,t)

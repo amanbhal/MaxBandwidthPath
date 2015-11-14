@@ -6,6 +6,7 @@ import timeit
 import time
 from datetime import datetime
 from heapImplementation import *
+from randomGraph import *
 
 def randomGraph():
 	#start = timeit.default_timer()
@@ -38,14 +39,14 @@ def maxBandwidth(B,s,t):
 	dad = [-1]*5000
 	capacity = [0]*5000
 	status[s] = "in-tree"
-	for w in B[s]:
+	for w in B[s][1]:
 		status[w[1]] = "fringe"
 		capacity[w[1]] = w[0]
 		dad[w[1]] = s
 	unvisited_queue = []
 	for v in B.keys():
 		if status[v]=="in-tree":
-			for pair in B[v]:
+			for pair in B[v][1]:
 				if status[pair[1]]=="fringe":
 					unvisited_queue.append(pair)
 	heapify_max(unvisited_queue)
@@ -53,7 +54,7 @@ def maxBandwidth(B,s,t):
 		uv = heappop(unvisited_queue)
 		v = uv[1]
 		status[v] = "in-tree"
-		for w in B[v]:
+		for w in B[v][1]:
 			if status[w[1]]=="unseen":
 				status[w[1]] = "fringe"
 				dad[w[1]] = v
@@ -66,7 +67,7 @@ def maxBandwidth(B,s,t):
 		unvisited_queue = []
 		for v in B.keys():
 			if status[v]=="in-tree":
-				for pair in B[v]:
+				for pair in B[v][1]:
 					if status[pair[1]]=="fringe":
 						unvisited_queue.append(pair)
 		heapify_max(unvisited_queue)
@@ -100,8 +101,5 @@ def largestFringe(status,capacity):
 			v = i
 	return v
 	
-#profile.run('randomGraph()')"""
-randomGraph()
-#s = A[random.randrange(0,5000,2)]
-#t = A[random.randrange(1,5000,2)]
-#print maxBandwidth(B,s,t)
+B,s,t = undirectedRandomGraph(500,100)
+maxBandwidth(B,s,t)

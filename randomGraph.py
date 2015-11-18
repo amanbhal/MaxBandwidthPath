@@ -22,9 +22,14 @@ def undirectedRandomGraph(vertices,percentage):
 	s = A[random.randrange(len(A))]
 	A.pop(A.index(s))
 	t = A[random.randrange(len(A))]
-	return B,s,t
-	"""for v in B:
-		print v, ":", B[v][0], "->",
+	print "Starting point is: ",s
+	print "Ending point is: ",t
+	#return B,s,t
+	"""print "Graph is : "
+	for v in B:
+		print v, ":",
 		for pair in B[v][1]:
-			print pair[1],
-		print """
+			print pair,
+		print ""
+	print "---------------------"""
+	return B,s,t

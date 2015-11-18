@@ -1,8 +1,4 @@
-import profile
 import random
-import timeit
-import time
-from datetime import datetime
 from randomGraph import *
 
 def randomGraph():
@@ -31,7 +27,7 @@ def randomGraph():
 	print "Ending Point is : " + str(t)
 	maxBandwidth(B,s,t)
 
-def maxBandwidth(B,s,t):
+def maxBandwidth_Dijkstra(B,s,t):
 	status = ["unseen"]*5000
 	dad = [-1]*5000
 	capacity = [0]*5000
@@ -58,7 +54,17 @@ def maxBandwidth(B,s,t):
 		path.append(dad[i])
 		i = dad[i]
 	path.reverse()
-	print "Number of vertices traversed in maximum bandwidth path is : " + str(len(path))
+	bandwidth = 1000
+	for i in range(len(path)-1):
+		v = path[i]
+		u = path[i+1]
+		for x in B.keys():
+			if x==v:
+				for y in B[v][1]:
+					if y[1]==u:
+						if bandwidth>y[0]:
+							bandwidth = y[0]
+	print "Number of vertices traversed in maximum bandwidth path is : " + str(len(path)),"with bandwidth:",bandwidth
 	print path
 				
 				
@@ -81,5 +87,5 @@ def largestFringe(status,capacity):
 			v = i
 	return v
 	
-B,s,t = undirectedRandomGraph(5000,1000)
-maxBandwidth(B,s,t)
+#B,s,t = undirectedRandomGraph(5000,1000)
+#maxBandwidth(B,s,t)

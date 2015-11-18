@@ -1,9 +1,6 @@
-import profile
 import random
-import timeit
-from time import clock
-from datetime import datetime
 from randomGraph import *
+import operator
 
 def directedRandomGraph(vertices,links):
 	#start = timeit.default_timer()
@@ -36,7 +33,7 @@ def directedRandomGraph(vertices,links):
 	print "Ending Point is : " + str(t)
 	maxBandwidth(B,s,t,vertices)
 
-def maxBandwidth(B,s,t,vertices):
+def maxBandwidth_Kruskal(B,s,t,vertices):
 	global dad
 	global rank
 	dad = [-1]*vertices
@@ -54,27 +51,29 @@ def maxBandwidth(B,s,t,vertices):
 				large = v
 			if (small,large) not in edges.keys():
 				edges.update({(small,large):(pair[0],False)})
-	edgeWeight = edges.values()
-	edgeWeight.sort()
-	edgeWeight.reverse()
+	#edgeWeight = edges.values()
+	#edgeWeight.sort(key=operator.itemgetter(0))
+	#edgeWeight.reverse()
+	#print edgeWeight
 	T = []
 	#for v in B.keys():
 	#	MakeSet(v)
-	for weight in edgeWeight:
-		v = -1
-		w = -1
-		for vertex, weightVisited in edges.items():
-			if weightVisited[0]==weight[0] and weightVisited[1]==False:
-				v = vertex[0]
-				w = vertex[1]
-				weightVisited = True
+	#for weight in edgeWeight:
+	#	v = -1
+	#	w = -1
+	for vertex in sorted(edges,key=edges.__getitem__,reverse=True):
+		#if edges[vertex][0]==weight[0] and edges[vertex][1]==False:
+		#print vertex
+		v = vertex[0]
+		w = vertex[1]
+			#edges[vertex] = (weight[0],True)
 		s1 = Find(v)
 		s2 = Find(w)
 		if s1!=s2:
 			T.append((v,w))
 			Union(s1,s2)
-	#print T
-	makeGraph(T,s,t,vertices)
+	#print "Maximum Spanning Tree is: ",T
+	makeGraph(B,T,s,t,vertices)
 	"""if t>s:
 		print t,
 		w = t
@@ -92,7 +91,7 @@ def maxBandwidth(B,s,t,vertices):
 	else:
 		print t"""
 		
-def makeGraph(T,s,t,vertices):
+def makeGraph(B,T,s,t,vertices):
 	G = {}
 	for i in range(vertices):
 		G.update({i:[]})
@@ -106,11 +105,25 @@ def makeGraph(T,s,t,vertices):
 	DFSpath(G,s,t)
 	#print "Path is : ",
 	#print path
+	answer = []
 	w = t
 	while(path[w]!=-1):
-		print w
+		answer.append(w)
 		w = path[w]
-	print s
+	answer.append(s)
+	bandwidth = 1000
+	for i in range(len(answer)-1):
+		v = answer[i]
+		u = answer[i+1]
+		for x in B.keys():
+			if x==v:
+				for y in B[v][1]:
+					if y[1]==u:
+						if bandwidth>y[0]:
+							bandwidth = y[0]
+	print "Number of vertices traversed in maximum bandwidth path is : ", len(answer), "with bandwidth: ", bandwidth
+	answer.reverse()
+	print answer
 	
 def DFSpath(G,s,t):
 	global path
@@ -146,13 +159,13 @@ def Union(s1,s2):
 		dad[s2] = s1
 		rank[s1] += 1
 
-B,s,t = undirectedRandomGraph(50,10)
-print "Starting Point : ",s
-print "Ending Point : ",t
-start = clock()
-maxBandwidth(B,s,t,50)
-stop = clock()
-print "Time taken : ", (stop-start)
+#B,s,t = undirectedRandomGraph(50,10)
+#print "Starting Point : ",s
+#print "Ending Point : ",t
+#start = clock()
+#maxBandwidth(B,s,t,50)
+#stop = clock()
+#print "Time taken : ", (stop-start)
 """B = {0:[(7,1),(4,2),(8,3)],
 	1: [(7,0),(1,2)],
 	2: [(4,0),(1,1),(3,4)],

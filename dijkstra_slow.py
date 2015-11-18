@@ -1,7 +1,10 @@
-import sys
+import profile
 import random
-from heapImplementation import *
+import timeit
+import time
+from datetime import datetime
 from randomGraph import *
+from operator import itemgetter
 
 def randomGraph():
 	#start = timeit.default_timer()
@@ -29,7 +32,7 @@ def randomGraph():
 	print "Ending Point is : " + str(t)
 	maxBandwidth(B,s,t)
 
-def maxBandwidth_DijkstraHeap(B,s,t):
+def maxBandwidth_Dijkstra(B,s,t):
 	status = ["unseen"]*5000
 	dad = [-1]*5000
 	capacity = [0]*5000
@@ -44,11 +47,13 @@ def maxBandwidth_DijkstraHeap(B,s,t):
 			for pair in B[v][1]:
 				if status[pair[1]]=="fringe":
 					unvisited_queue.append(pair)
-	heapify_max(unvisited_queue)
+	unvisited_queue = sorted(unvisited_queue,key=itemgetter(0),reverse=True)
+	#print unvisited_queue
 	while(len(unvisited_queue)):
-		uv = heappop(unvisited_queue)
+		uv = unvisited_queue.pop(0)
 		v = uv[1]
 		status[v] = "in-tree"
+		#print v
 		for w in B[v][1]:
 			if status[w[1]]=="unseen":
 				status[w[1]] = "fringe"
@@ -57,16 +62,14 @@ def maxBandwidth_DijkstraHeap(B,s,t):
 			elif(status[w[1]]=="fringe" and capacity[w[1]]<minimum(capacity[v],w[0])):
 				dad[w[1]] = v
 				capacity[w[1]] = minimum(capacity[v],w[0])
-		#while(len(unvisited_queue)):
-		#	heappop(unvisited_queue)
 		unvisited_queue = []
 		for v in B.keys():
 			if status[v]=="in-tree":
 				for pair in B[v][1]:
 					if status[pair[1]]=="fringe":
 						unvisited_queue.append(pair)
-		heapify_max(unvisited_queue)
-	#return dad
+		unvisited_queue = sorted(unvisited_queue,key=itemgetter(0),reverse=True)
+		#print unvisited_queue
 	i = t
 	path = [t]
 	while(dad[i]!=-1):
@@ -83,7 +86,7 @@ def maxBandwidth_DijkstraHeap(B,s,t):
 					if y[1]==u:
 						if bandwidth>y[0]:
 							bandwidth = y[0]
-	print "Number of vertices traversed in maximum bandwidth path is : " + str(len(path)), "with bandwidth: ", bandwidth
+	print "Number of vertices traversed in maximum bandwidth path is : " + str(len(path)),"with bandwidth:",bandwidth
 	print path
 				
 				
@@ -92,7 +95,19 @@ def minimum(a,b):
 		return a
 	else:
 		return b
-
+		
+def largestFringe(status,capacity):
+	temp = -1
+	v = -1
+	vertex = []
+	for i in range(len(status)):
+		if status[i]=="fringe":
+			vertex.append(i)
+	for i in vertex:
+		if temp<capacity[i]:
+			temp = capacity[i]
+			v = i
+	return v
 	
-#B,s,t = undirectedRandomGraph(500,100)
+#B,s,t = undirectedRandomGraph(5000,1000)
 #maxBandwidth(B,s,t)

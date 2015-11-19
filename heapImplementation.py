@@ -1,4 +1,4 @@
-__all__ = ['heappush', 'heappop', 'heapify', 'heapify_max']
+__all__ = ['heappush', 'heappop', 'heapify', 'heapify_max','_siftdown']
 
 from itertools import islice, count, imap, izip, tee, chain
 from operator import itemgetter

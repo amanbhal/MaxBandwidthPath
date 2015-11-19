@@ -96,18 +96,6 @@ def minimum(a,b):
 	else:
 		return b
 		
-def largestFringe(status,capacity):
-	temp = -1
-	v = -1
-	vertex = []
-	for i in range(len(status)):
-		if status[i]=="fringe":
-			vertex.append(i)
-	for i in vertex:
-		if temp<capacity[i]:
-			temp = capacity[i]
-			v = i
-	return v
 	
 #B,s,t = undirectedRandomGraph(5000,1000)
 #maxBandwidth(B,s,t)

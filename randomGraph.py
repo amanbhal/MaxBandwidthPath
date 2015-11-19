@@ -12,7 +12,7 @@ def undirectedRandomGraph(vertices,percentage):
 	for v in range(vertices):
 		for u in range(v+1,vertices):
 			x = random.randrange(1,101)
-			weight = random.randrange(1,101)
+			weight = random.randrange(1,1001)
 			if(x<=percentage and B[v][0]<maxEdge and B[u][0]<maxEdge):
 				B[v][1].append((weight,u))
 				B[u][1].append((weight,v))
@@ -32,4 +32,32 @@ def undirectedRandomGraph(vertices,percentage):
 			print pair,
 		print ""
 	print "---------------------"""
+	B = addEdges(B,s,t,vertices)
 	return B,s,t
+
+def addEdges(B,s,t,vertices):
+	#print s
+	start = s
+	for i in range(vertices):
+		weight = random.randrange(1,1001)
+		if(i!=start and i!=t):
+			#print i
+			B[i][1].append((weight,s))
+			B[s][1].append((weight,i))
+			B[i][0] += 1
+			B[s][0] += 1
+			s = i
+	#print t
+	weight = random.randrange(1,1001)
+	B[s][1].append((weight,t))
+	B[t][1].append((weight,s))
+	B[s][0] += 1
+	B[t][0] += 1
+	return B
+	
+#undirectedRandomGraph(10,30)
+
+		
+				
+			
+	

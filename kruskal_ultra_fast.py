@@ -32,13 +32,17 @@ def maxBandwidth_Kruskal_Fast(B,s,t,vertices):
 	for i in delete:
 		del edges[i]
 	edgeHeap = edges.keys()
-	heapify_max(edgeHeap)
+	edgeHeap = heapsort(edgeHeap)
+	edgeHeap.reverse()
+	#print edgeHeap
+	#heapify_max(edgeHeap)
 	T = {}
 	for i in range(vertices):
 		T.update({i:[]})
 	
 	while(len(edgeHeap)):
-		x = heappop(edgeHeap)
+		x = edgeHeap.pop(0)
+		#x = heappop(edgeHeap)
 		while(len(edges[x])!=0):
 			vertex = edges[x].pop()
 			a = vertex[0]
@@ -156,12 +160,12 @@ def Union(s1,s2):
 		dad[s2] = s1
 		rank[s1] += 1
 
-""""B,s,t = undirectedRandomGraph(5000,20)
+B,s,t = undirectedRandomGraph(5000,20)
 start = clock()
 maxBandwidth_Kruskal_Fast(B,s,t,5000)
 stop = clock()
 print "Time taken : ", (stop-start)
-B = {0:[3,[(4,1),(4,2),(4,3)]],
+"""B = {0:[3,[(4,1),(4,2),(4,3)]],
 	1: [2,[(4,0),(1,2)]],
 	2: [3,[(4,0),(1,1),(3,4)]],
 	3: [2,[(4,0),(2,4)]],

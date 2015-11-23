@@ -20,5 +20,5 @@ def siftdown(lst, start, end):
     else:
       break
 	  
-ary = [7, 6, 5, 9, 8, 4, 3, 1, 2, 0]
-print heapsort(ary)
+#ary = [7, 6, 5, 9, 8, 4, 3, 1, 2, 0]
+#print heapsort(ary)

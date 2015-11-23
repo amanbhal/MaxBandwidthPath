@@ -22,8 +22,8 @@ def undirectedRandomGraph(vertices,percentage):
 	s = A[random.randrange(len(A))]
 	A.pop(A.index(s))
 	t = A[random.randrange(len(A))]
-	print "Starting point is: ",s
-	print "Ending point is: ",t
+	#print "Starting point is: ",s
+	#print "Ending point is: ",t
 	#return B,s,t
 	"""print "Graph is : "
 	for v in B:
@@ -40,7 +40,7 @@ def addEdges(B,s,t,vertices):
 	start = s
 	for i in range(vertices):
 		weight = random.randrange(1,1001)
-		if(i!=start and i!=t):
+		if(i!=start and i!=t and notConnected(B,i,s)):
 			#print i
 			B[i][1].append((weight,s))
 			B[s][1].append((weight,i))
@@ -53,11 +53,19 @@ def addEdges(B,s,t,vertices):
 	B[t][1].append((weight,s))
 	B[s][0] += 1
 	B[t][0] += 1
+	"""print "Graph is : "
+	for v in B:
+		print v, ":",
+		for pair in B[v][1]:
+			print pair,
+		print ""
+	print "---------------------"""
 	return B
+
+def notConnected(B,i,s):
+	for pair in B[i][1]:
+		if pair[1]==s:
+			return False
+	return True
 	
 #undirectedRandomGraph(10,30)
-
-		
-				
-			
-	

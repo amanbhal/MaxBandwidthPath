@@ -3,7 +3,7 @@ import random
 def undirectedSparseRandomGraph(vertices):
 	B = {}
 	A = []
-	maxEdge = 5
+	maxEdge = 6
 	
 	for i in range(vertices):
 		A.append(i)
@@ -51,10 +51,10 @@ def undirectedSparseRandomGraph(vertices):
 		print ""
 	print "---------------------"""
 	for v in B.keys():
-		if(B[v][0]!=5):
+		if(B[v][0]!=6):
 			#print "Fault",v
 			#B.clear()
-			undirectedSparseRandomGraph(5000)
+			undirectedSparseRandomGraph(vertices)
 			B = addEdges(B,s,t,vertices)
 			return B,s,t
 		for pair in B[v][1]:
@@ -65,7 +65,7 @@ def undirectedSparseRandomGraph(vertices):
 			if count>1:
 				#print "Fault",v,pair[1]
 				#B.clear()
-				undirectedSparseRandomGraph(5000)
+				undirectedSparseRandomGraph(vertices)
 				B = addEdges(B,s,t,vertices)
 				return B,s,t
 	B = addEdges(B,s,t,vertices)
@@ -78,7 +78,7 @@ def addEdges(B,s,t,vertices):
 	#print s
 	for i in range(vertices):
 		weight = random.randrange(1,1001)
-		if(i!=start and i!=t):
+		if(i!=start and i!=t and notConnected(B,i,s)):
 			#print i
 			B[i][1].append((weight,s))
 			B[s][1].append((weight,i))
@@ -93,4 +93,9 @@ def addEdges(B,s,t,vertices):
 	B[t][0] += 1
 	return B
 
+def notConnected(B,i,s):
+	for pair in B[i][1]:
+		if pair[1]==s:
+			return False
+	return True
 #undirectedSparseRandomGraph(10)

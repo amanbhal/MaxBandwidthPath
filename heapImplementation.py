@@ -1,4 +1,4 @@
-__all__ = ['heappush', 'heappop', 'heapify', 'heapify_max','_siftdown']
+__all__ = ['heappush', 'heappop', 'heapify', 'heapify_max','_siftdown','update']
 
 from itertools import islice, count, imap, izip, tee, chain
 from operator import itemgetter
@@ -11,19 +11,24 @@ def cmp_lt(x, y):
 def heappush(heap, item):
     """Push item onto heap, maintaining the heap invariant."""
     heap.append(item)
-    _siftdown(heap, 0, len(heap)-1)
+    _siftdown_max(heap, 0, len(heap)-1)
 
 def heappop(heap):
-    """Pop the smallest item off the heap, maintaining the heap invariant."""
-    lastelt = heap.pop()    # raises appropriate IndexError if heap is empty
-    if heap:
-        returnitem = heap[0]
-        heap[0] = lastelt
-        _siftup(heap, 0)
-    else:
-        returnitem = lastelt
-    return returnitem
+	lastelt = heap.pop()    # raises appropriate IndexError if heap is empty
+	if heap:
+		returnitem = heap[0]
+		heap[0] = lastelt
+		_siftup_max(heap, 0) #_siftup(heap,0) use it for min heap
+	else:
+		returnitem = lastelt
+	return returnitem
 
+def update(heap,newValue,oldValue):
+	ind = heap.index(oldValue)
+	heap[ind] = newValue
+	#_siftup_max(heap, ind)		once in a while answer is wrong
+	_siftdown_max(heap,0,ind)
+	
 def heapify(x):
     """Transform list into a heap, in-place, in O(len(x)) time."""
     n = len(x)

@@ -4,32 +4,6 @@ from heapImplementation import *
 from randomGraph import *
 from time import clock
 
-def randomGraph():
-	#start = timeit.default_timer()
-	#start = datetime.now().microsecond
-	##start = time.time()
-	B = {}
-	A = []
-	for i in range(5000):
-		A.append(i)
-		B.update({i:[]})
-		
-	for i in range(5000):
-		start = random.randrange(0,4994)
-		A.pop(A.index(i))
-		random.shuffle(A)
-		for j in A[start:start+6]:
-			B[i].append((random.randrange(1,101),j))
-		A.append(i)
-	#stop = timeit.default_timer()
-	#stop = datetime.now().microsecond
-	##print (time.time() - start)
-	s = A[random.randrange(0,5000,2)]
-	t = A[random.randrange(1,5000,2)]
-	print "Starting Point is : " + str(s)
-	print "Ending Point is : " + str(t)
-	maxBandwidth(B,s,t)
-
 def maxBandwidth_DijkstraHeap(B,s,t):
 	status = ["unseen"]*5000
 	dad = [-1]*5000
@@ -44,7 +18,7 @@ def maxBandwidth_DijkstraHeap(B,s,t):
 		if status[v]=="in-tree":
 			for pair in B[v][1]:
 				if status[pair[1]]=="fringe":
-					unvisited_queue.append(pair)
+					unvisited_queue.append((capacity[pair[1]],pair[1]))
 	heapify_max(unvisited_queue)
 	while(len(unvisited_queue)):
 		uv = heappop(unvisited_queue)
@@ -55,18 +29,21 @@ def maxBandwidth_DijkstraHeap(B,s,t):
 				status[w[1]] = "fringe"
 				dad[w[1]] = v
 				capacity[w[1]] = minimum(capacity[v],w[0])
+				heappush(unvisited_queue,(capacity[w[1]],w[1]))
 			elif(status[w[1]]=="fringe" and capacity[w[1]]<minimum(capacity[v],w[0])):
 				dad[w[1]] = v
+				old = capacity[w[1]]
 				capacity[w[1]] = minimum(capacity[v],w[0])
+				update(unvisited_queue,(capacity[w[1]],w[1]),(old,w[1]))
 		#while(len(unvisited_queue)):
 		#	heappop(unvisited_queue)
-		unvisited_queue = []
+		""""unvisited_queue = []
 		for v in B.keys():
 			if status[v]=="in-tree":
 				for pair in B[v][1]:
 					if status[pair[1]]=="fringe":
 						unvisited_queue.append(pair)
-		heapify_max(unvisited_queue)
+		heapify_max(unvisited_queue)"""
 	#return dad
 	i = t
 	path = [t]
@@ -95,8 +72,7 @@ def minimum(a,b):
 		return b
 
 	
-B,s,t = undirectedRandomGraph(1000,20)
+"""B,s,t = undirectedRandomGraph(5000,20)
 start = clock()
 maxBandwidth_DijkstraHeap(B,s,t)
-stop = clock()
-print stop-start
+stop = clock()"""

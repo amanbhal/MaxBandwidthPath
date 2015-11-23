@@ -1,10 +1,7 @@
-import profile
 import random
-import timeit
-import time
-from datetime import datetime
 from randomGraph import *
 from operator import itemgetter
+from time import clock
 
 def randomGraph():
 	#start = timeit.default_timer()
@@ -76,7 +73,7 @@ def maxBandwidth_Dijkstra(B,s,t):
 		path.append(dad[i])
 		i = dad[i]
 	path.reverse()
-	bandwidth = 1000
+	bandwidth = 1001
 	for i in range(len(path)-1):
 		v = path[i]
 		u = path[i+1]
@@ -97,5 +94,8 @@ def minimum(a,b):
 		return b
 		
 	
-#B,s,t = undirectedRandomGraph(5000,1000)
-#maxBandwidth(B,s,t)
+"""B,s,t = undirectedRandomGraph(5000,20)
+start = clock()
+maxBandwidth_Dijkstra(B,s,t)
+stop = clock()
+print stop-start"""

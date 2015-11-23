@@ -1,31 +1,6 @@
 import random
 from randomGraph import *
-
-def randomGraph():
-	#start = timeit.default_timer()
-	#start = datetime.now().microsecond
-	##start = time.time()
-	B = {}
-	A = []
-	for i in range(5000):
-		A.append(i)
-		B.update({i:[]})
-		
-	for i in range(5000):
-		start = random.randrange(0,4994)
-		A.pop(A.index(i))
-		random.shuffle(A)
-		for j in A[start:start+6]:
-			B[i].append((random.randrange(1,101),j))
-		A.append(i)
-	#stop = timeit.default_timer()
-	#stop = datetime.now().microsecond
-	##print (time.time() - start)
-	s = A[random.randrange(0,5000,2)]
-	t = A[random.randrange(1,5000,2)]
-	print "Starting Point is : " + str(s)
-	print "Ending Point is : " + str(t)
-	maxBandwidth(B,s,t)
+from operator import itemgetter
 
 def maxBandwidth_Dijkstra(B,s,t):
 	status = ["unseen"]*5000
@@ -81,11 +56,17 @@ def largestFringe(status,capacity):
 	for i in range(len(status)):
 		if status[i]=="fringe":
 			vertex.append(i)
+	#arr = []
 	for i in vertex:
+	#	arr.append((capacity[i],i))
+	#arr = sorted(arr,key=itemgetter(0))
 		if temp<capacity[i]:
 			temp = capacity[i]
 			v = i
 	return v
+	#last = arr[-1]
+	#v = last[1]
+	#return v
 	
 #B,s,t = undirectedRandomGraph(5000,1000)
 #maxBandwidth(B,s,t)
